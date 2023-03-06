@@ -20,6 +20,7 @@ import com.google.firebase.database.FirebaseDatabase;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     private NavigationView nav_view;
+    private DrawerLayout drawerLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,7 +32,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private void init()
     {
         nav_view = findViewById(R.id.nav_view);
+        drawerLayout = findViewById(R.id.drawerLayout);
         nav_view.setNavigationItemSelectedListener(this);
+        drawerLayout.openDrawer(GravityCompat.START);
 
         // test firebase
         FirebaseDatabase database = FirebaseDatabase.getInstance();

@@ -14,6 +14,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -21,6 +22,8 @@ import com.google.firebase.database.FirebaseDatabase;
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     private NavigationView nav_view;
     private DrawerLayout drawerLayout;
+
+    private FirebaseAuth mAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,8 +41,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         // test firebase
         FirebaseDatabase database = FirebaseDatabase.getInstance();
+        mAuth = FirebaseAuth.getInsance();
         DatabaseReference myRef = database.getReference("message");
         myRef.setValue("Hello, World!");
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        FirebaseUser currentUser = mAuth.getCurrentUser();
     }
 
     @Override
@@ -97,5 +107,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         });
         AlertDialog dialog = dialogBuilder.create();
         dialog.show();
+    }
+
+    private void signUp(String email, String password){
+        mAuth.createUserWithEmailAndPassword(email, password)
+                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>(){
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task){
+
+                    }
+                    )
+
+        }
     }
 }

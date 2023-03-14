@@ -32,6 +32,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     private FirebaseAuth mAuth;
 
+    private TextView userEmail;
+    private AlertDialog dialog;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,6 +47,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         nav_view = findViewById(R.id.nav_view);
         drawerLayout = findViewById(R.id.drawerLayout);
         nav_view.setNavigationItemSelectedListener(this);
+        userEmail = nav_view.getHeaderView(0).findViewById(R.id.tvemail);
         drawerLayout.openDrawer(GravityCompat.START);
 
         // test firebase
@@ -56,8 +60,19 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     protected void onStart() {
         super.onStart();
-        FirebaseUser currentUser = mAuth.getCurrentUser();
 
+    }
+    private void getUser()
+    {
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+        if (currentUser != null)
+        {
+            userEmail.setText(currentUser.getEmail());
+        }
+        else
+        {
+            userEmail.setText(R.string.sign_in_or_sign_up);
+        }
     }
 
     @Override
@@ -89,6 +104,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 Toast.makeText(this, "Pressed id sign in", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.id_sign_out:
+                signOut();
                 Toast.makeText(this, "Pressed id sign out", Toast.LENGTH_SHORT).show();
                 break;
         }
@@ -114,29 +130,30 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             public void onClick(View v) {
                if (index == 0){
                    signUp(edEmail.getText().toString(),edPassword.getText().toString());
+
                }
+               else
+               {
+                   signIn(edEmail.getText().toString(),edPassword.getText().toString());
+               }
+               dialog.dismiss();
             }
         });
-        AlertDialog dialog = dialogBuilder.create();
+        dialog = dialogBuilder.create();
         dialog.show();
+
     }
 
     private void signUp(String email, String password){
 
         if (!email.equals("") && !password.equals("")) {
 
-            Task<AuthResult> authResultTask = mAuth.createUserWithEmailAndPassword(email, password)
+            mAuth.createUserWithEmailAndPassword(email, password)
                     .addOnCompleteListener(MainActivity.this, new OnCompleteListener<AuthResult>() {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             if (task.isSuccessful()) {
-                                // Sign in success, update UI with the signed-in user's information
-
-                                FirebaseUser user = mAuth.getCurrentUser();
-                                if (user != null){
-                                    Toast.makeText(getApplicationContext(), "Регистрация завершена",
-                                            Toast.LENGTH_SHORT).show();
-                                    Log.d("MyLogMain", "createUserWithEmail:success" + " " +user.getEmail());}
+                                getUser();
                             } else {
                                 // If sign in fails, display a message to the user.
                                 Log.w("MyLogMain", "createUserWithEmail:failure", task.getException());
@@ -146,22 +163,22 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         }
                     });
         }
-        else{
+        else
+        {
             Toast.makeText(this, "Почта и пароль не указаны", Toast.LENGTH_SHORT).show();
         }
 
     }
 
     private void signIn(String email, String password){
+        if (!email.equals("") && !password.equals(""))
+        {
         mAuth.signInWithEmailAndPassword(email,password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (task.isSuccessful()){
-                    Log.d("MyLogMain", "signInWithEmail:success");
-                    FirebaseUser user = mAuth.getCurrentUser();
-                    Toast.makeText(getApplicationContext(), "Вход в систему",
-                            Toast.LENGTH_SHORT).show();
+                    getUser();
                 }
                 else{
                     Log.d("MyLogMain", "signInWithEmail:failure", task.getException());
@@ -170,6 +187,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 }
             }
         });
+        }
+        else
+        {
+            Toast.makeText(this, "Почта и пароль не указаны", Toast.LENGTH_SHORT).show();
+        }
+    }
+    private void signOut()
+    {
+        mAuth.signOut();
+        getUser();
     }
 
 

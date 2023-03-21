@@ -7,16 +7,18 @@
     tools:context=".EditActivity">
 
     <ImageView
-        android:id="@+id/emItem"
-        android:layout_width="wrap_content"
+        android:id="@+id/imItem"
+        android:layout_width="0dp"
         android:layout_height="200dp"
         android:layout_marginStart="10dp"
         android:layout_marginTop="10dp"
         android:layout_marginEnd="10dp"
+        android:src="@android:drawable/ic_menu_gallery"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:srcCompat="@tools:sample/backgrounds/scenic" />
+        tools:srcCompat="@android:drawable/ic_menu_gallery" />
+
 
     <EditText
         android:id="@+id/edTitle"
@@ -28,15 +30,17 @@
         android:ems="10"
         android:hint="@string/edit_ac_title"
         android:inputType="textPersonName"
-        app:layout_constraintEnd_toEndOf="@+id/emItem"
-        app:layout_constraintStart_toStartOf="@+id/emItem"
-        app:layout_constraintTop_toBottomOf="@+id/emItem" />
+        android:textSize="20dp"
+        app:layout_constraintEnd_toEndOf="@+id/imItem"
+        app:layout_constraintStart_toStartOf="@+id/imItem"
+        app:layout_constraintTop_toBottomOf="@+id/imItem" />
 
     <EditText
+        android:textSize="20dp"
         android:id="@+id/edPrice"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="10dp"
         android:ems="10"
         android:hint="@string/edit_ac_price"
         android:inputType="textPersonName"
@@ -46,6 +50,7 @@
         app:layout_constraintTop_toBottomOf="@+id/edTitle" />
 
     <EditText
+        android:textSize="20dp"
         android:id="@+id/edTel"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -66,7 +71,8 @@
         android:ems="10"
         android:gravity="top"
         android:hint="@string/edit_ac_discriptin"
-        android:inputType="textPersonName"
+        android:inputType="textMultiLine|textPersonName"
+        android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/edTel"
         app:layout_constraintHorizontal_bias="0.0"

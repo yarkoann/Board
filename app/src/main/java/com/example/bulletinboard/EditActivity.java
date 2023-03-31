@@ -11,13 +11,19 @@ import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -31,6 +37,10 @@ public class EditActivity extends AppCompatActivity {
     private ImageView imItem;
 
     private Uri uploadUri;
+    private Spinner spinner;
+    private DatabaseReference dRef;
+    private FirebaseAuth mAuth;
+    private EditText edTitle, edPrice, edPhone, edDisc;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +53,15 @@ public class EditActivity extends AppCompatActivity {
     }
     private  void init()
     {
+        edTitle = findViewById(R.id.edTitle);
+        edPrice = findViewById(R.id.edPrice);
+        edPhone = findViewById(R.id.edTel);
+        edDisc = findViewById(R.id.edDisc);
+        spinner = findViewById(R.id.spinner);
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
+                R.array.category_spinner, android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner.setAdapter(adapter);
         mStorageRef = FirebaseStorage.getInstance().getReference("Images");
         imItem = findViewById(R.id.imItem);
     }
@@ -84,11 +103,33 @@ public class EditActivity extends AppCompatActivity {
         })
 ;
     }
-
+    public void onClickSavePost(View view)
+    {
+        savePost();
+    }
     private void getImage()
     {
         Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
         intent.setType("image/*");
         startActivityForResult(intent, 10);
+    }
+    private void savePost()
+    {
+        dRef = FirebaseDatabase.getInstance().getReference(spinner.getSelectedItem().toString());
+        mAuth = FirebaseAuth.getInstance();
+        if(mAuth.getUid() != null)
+        {
+            String key = dRef.push().getKey();
+            NewPost post = new NewPost();
+
+            post.setImageId(uploadUri.toString());
+            post.setTitle(edTitle.getText().toString());
+            post.setPhone(edPhone.getText().toString());
+            post.setPrice(edPrice.getText().toString());
+            post.setDisc(edDisc.getText().toString());
+            post.setKey(key);
+
+            if(key != null)dRef.child(mAuth.getUid()).child(key).setValue(post);
+        }
     }
 }

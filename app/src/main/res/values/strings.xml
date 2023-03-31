@@ -24,7 +24,8 @@
     <string name="edit_ac_discriptin">Описание</string>
     <string name="edit_ac_tel">Телефон</string>
 
-
+    <string name="toggle_open">Открыть</string>
+    <string name="toggle_close">Закрыть</string>
 
 
 </resources>

@@ -1,21 +1,26 @@
 package com.example.bulletinboard;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ActionMenuView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
@@ -34,6 +39,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     private TextView userEmail;
     private AlertDialog dialog;
+    private Toolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,21 +52,25 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     {
         nav_view = findViewById(R.id.nav_view);
         drawerLayout = findViewById(R.id.drawerLayout);
+        toolbar = findViewById(R.id.toolbar);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar,R.string.toggle_open, R.string.toggle_close);
+        drawerLayout.addDrawerListener(toggle);
+        toggle.syncState();
         nav_view.setNavigationItemSelectedListener(this);
         userEmail = nav_view.getHeaderView(0).findViewById(R.id.tvemail);
-        drawerLayout.openDrawer(GravityCompat.START);
-
-        // test firebase
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
         mAuth = FirebaseAuth.getInstance();
-        DatabaseReference myRef = database.getReference("message");
-        myRef.setValue("Hello, World!");
+
     }
 
     @Override
     protected void onStart() {
         super.onStart();
 
+    }
+    public void onClickEdit(View view)
+    {
+        Intent i = new Intent(MainActivity.this,EditActivity.class);
+        startActivity(i);
     }
     private void getUser()
     {

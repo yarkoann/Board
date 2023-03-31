@@ -6,76 +6,95 @@
     android:layout_height="match_parent"
     tools:context=".EditActivity">
 
-    <ImageView
-        android:id="@+id/imItem"
-        android:layout_width="0dp"
-        android:layout_height="200dp"
+    <LinearLayout
+        android:id="@+id/linearLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:layout_marginStart="10dp"
         android:layout_marginTop="10dp"
         android:layout_marginEnd="10dp"
-        android:src="@android:drawable/ic_menu_gallery"
+        android:layout_marginBottom="10dp"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:srcCompat="@android:drawable/ic_menu_gallery" />
+        app:layout_constraintTop_toTopOf="parent">
 
+        <ImageView
+            android:id="@+id/imItem"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:layout_marginTop="10dp"
+            android:src="@android:drawable/ic_menu_gallery"
+            tools:srcCompat="@android:drawable/ic_menu_gallery" />
 
-    <EditText
-        android:id="@+id/edTitle"
-        android:layout_width="0dp"
+        <Spinner
+            android:id="@+id/spinner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:background="@android:drawable/spinner_background" />
+
+        <EditText
+            android:id="@+id/edTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:backgroundTint="#B887E3"
+            android:ems="10"
+            android:hint="@string/edit_ac_title"
+            android:inputType="textPersonName"
+            android:textSize="20dp" />
+
+        <EditText
+            android:id="@+id/edPrice"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:backgroundTint="#B887E3"
+            android:ems="10"
+            android:hint="@string/edit_ac_price"
+            android:inputType="textPersonName"
+            android:textSize="20dp" />
+
+        <EditText
+            android:id="@+id/edTel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:backgroundTint="#B887E3"
+            android:ems="10"
+            android:hint="@string/edit_ac_tel"
+            android:inputType="textPersonName"
+            android:textSize="20dp" />
+
+        <EditText
+            android:id="@+id/edDisc"
+            android:layout_width="match_parent"
+            android:layout_height="190dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:backgroundTint="#B887E3"
+            android:ems="10"
+            android:gravity="top"
+            android:hint="@string/edit_ac_discriptin"
+            android:inputType="textMultiLine|textPersonName"
+            android:textSize="20sp" />
+
+    </LinearLayout>
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/saveBtn"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="10dp"
         android:layout_marginEnd="10dp"
-        android:ems="10"
-        android:hint="@string/edit_ac_title"
-        android:inputType="textPersonName"
-        android:textSize="20dp"
-        app:layout_constraintEnd_toEndOf="@+id/imItem"
-        app:layout_constraintStart_toStartOf="@+id/imItem"
-        app:layout_constraintTop_toBottomOf="@+id/imItem" />
-
-    <EditText
-        android:textSize="20dp"
-        android:id="@+id/edPrice"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:ems="10"
-        android:hint="@string/edit_ac_price"
-        android:inputType="textPersonName"
-        app:layout_constraintEnd_toEndOf="@+id/edTitle"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="@+id/edTitle"
-        app:layout_constraintTop_toBottomOf="@+id/edTitle" />
-
-    <EditText
-        android:textSize="20dp"
-        android:id="@+id/edTel"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:ems="10"
-        android:hint="@string/edit_ac_tel"
-        android:inputType="textPersonName"
-        app:layout_constraintEnd_toEndOf="@+id/edPrice"
-        app:layout_constraintStart_toStartOf="@+id/edPrice"
-        app:layout_constraintTop_toBottomOf="@+id/edPrice" />
-
-    <EditText
-        android:id="@+id/edDisc"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginTop="10dp"
         android:layout_marginBottom="10dp"
-        android:ems="10"
-        android:gravity="top"
-        android:hint="@string/edit_ac_discriptin"
-        android:inputType="textMultiLine|textPersonName"
-        android:textSize="20sp"
+        android:clickable="true"
+        android:onClick="onClickSavePost"
+        android:src="@drawable/ic_save"
+        app:backgroundTint="#B887E3"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@+id/edTel"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="@+id/edTel"
-        app:layout_constraintTop_toBottomOf="@+id/edTel" />
+        app:layout_constraintEnd_toEndOf="parent" />
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>

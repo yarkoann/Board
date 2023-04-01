@@ -36,5 +36,5 @@
         app:backgroundTint="#B887E3"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:srcCompat="@drawable/ic_save_sign" />
+        app:srcCompat="@android:drawable/ic_dialog_dialer" />
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -47,6 +47,7 @@
             android:id="@+id/buttonSignUp"
             android:layout_width="210dp"
             android:layout_height="wrap_content"
+            android:backgroundTint="#B887E3"
             android:foregroundGravity="center"
             android:gravity="center"
             android:text="@string/sign_up_button"

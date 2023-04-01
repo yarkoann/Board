@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.bulletinboard.NewPost;
 import com.example.bulletinboard.R;
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
@@ -61,9 +62,11 @@ public class DataAdapter extends RecyclerView.Adapter<DataAdapter.ViewHolderData
 
         public void setData(NewPost newPost)
         {
+            Picasso.get().load(newPost.getImageId()).into(imAds);
             tvTitle.setText(newPost.getTitle());
             String price_phone = "Цена: " + newPost.getPrice() + " Телефон: " + newPost.getPhone();
             tvPricePhone.setText(price_phone);
+            tvDisc.setText(newPost.getDisc());
         }
 
         @Override
@@ -76,5 +79,12 @@ public class DataAdapter extends RecyclerView.Adapter<DataAdapter.ViewHolderData
     public interface OnItemClickCustom
     {
         public void onItemSelected(int position);
+    }
+    public void updateAdapter(List<NewPost> listData)
+    {
+        arrayPost.clear();
+        arrayPost.addAll(listData);
+        notifyDataSetChanged();
+
     }
 }

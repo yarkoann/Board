@@ -118,10 +118,8 @@ public class EditActivity extends AppCompatActivity {
     {
         dRef = FirebaseDatabase.getInstance().getReference(spinner.getSelectedItem().toString());
         mAuth = FirebaseAuth.getInstance();
-        Log.d("test", ""+mAuth.getUid());
         if(mAuth.getUid() != null)
         {
-            Log.d("Test", "Проверка 1 ");
             String key = dRef.push().getKey();
             NewPost post = new NewPost();
 
@@ -133,7 +131,6 @@ public class EditActivity extends AppCompatActivity {
             post.setKey(key);
             post.setTime(String.valueOf((System.nanoTime())));
             post.setUid(mAuth.getUid());
-            Log.d("Test", "Проверка 2 " + post);
 
             if(key != null)dRef.child(key).child("bulletin").setValue(post);
         }

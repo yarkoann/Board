@@ -34,9 +34,12 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 import adapter.DataAdapter;
+import adapter.DataSender;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     private NavigationView nav_view;
@@ -52,6 +55,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private RecyclerView rcView;
 
     private DataAdapter dataAdapter;
+    private DataSender dataSender;
+
+    private DbManager dbManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,20 +72,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         setOnItemClickCustom();
         rcView = findViewById(R.id.rcView);
         rcView.setLayoutManager(new LinearLayoutManager(this));
-        List<NewPost> arrayTestPost =new ArrayList<>();
-        NewPost newPost = new NewPost();
-        newPost.setTitle("Волга");
-        newPost.setPhone("212121221");
-        newPost.setPrice("122222");
-        newPost.setDisc("Авто в хорошем состоянии");
-        arrayTestPost.add(newPost);
-        arrayTestPost.add(newPost);
-        arrayTestPost.add(newPost);
-        arrayTestPost.add(newPost);
-        arrayTestPost.add(newPost);
-        arrayTestPost.add(newPost);
-        dataAdapter = new DataAdapter(arrayTestPost, this, onItemClickCustom);
+        List<NewPost> arrayPost =new ArrayList<>();
+        dataAdapter = new DataAdapter(arrayPost, this, onItemClickCustom);
         rcView.setAdapter(dataAdapter);
+
         nav_view = findViewById(R.id.nav_view);
         drawerLayout = findViewById(R.id.drawerLayout);
         toolbar = findViewById(R.id.toolbar);
@@ -90,16 +86,32 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         userEmail = nav_view.getHeaderView(0).findViewById(R.id.tvemail);
         mAuth = FirebaseAuth.getInstance();
 
+        // test
+        getDataDb();
+        dbManager = new DbManager(dataSender);
+        dbManager.getDataFromDb("Машины");
 
 
 
+
+    }
+    private void getDataDb()
+    {
+        dataSender = new DataSender() {
+            @Override
+            public void onDataRecived(List<NewPost> listData)
+            {
+                Collections.reverse(listData);
+                dataAdapter.updateAdapter(listData);
+            }
+        };
     }
     private void setOnItemClickCustom()
     {
         onItemClickCustom = new DataAdapter.OnItemClickCustom() {
             @Override
             public void onItemSelected(int position) {
-                Log.d("Объявление", "Позиция: "  + position);
+                Log.d("MyLOg", "Position: "  + position);
 
             }
         };
@@ -134,31 +146,28 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         switch (id)
         {
             case R.id.id_my_ads:
-                Toast.makeText(this, "Pressed id my ads", Toast.LENGTH_SHORT).show();
+                dbManager.getMyAdsFromDb(mAuth.getUid());
                 break;
             case R.id.id_car_ads:
-                Toast.makeText(this, "Pressed id cars", Toast.LENGTH_SHORT).show();
+                dbManager.getDataFromDb("Машины");
                 break;
             case R.id.id_pc_ads:
-                Toast.makeText(this, "Pressed id pc", Toast.LENGTH_SHORT).show();
-                    break;
+                dbManager.getDataFromDb("Компьютеры");
+                break;
             case R.id.id_phone_ads:
-                Toast.makeText(this, "Pressed id phone", Toast.LENGTH_SHORT).show();
+                dbManager.getDataFromDb("Смартфоны");
                 break;
             case R.id.id_dm_ads:
-                Toast.makeText(this, "Pressed id dm", Toast.LENGTH_SHORT).show();
+                dbManager.getDataFromDb("Бытовая техника");
                 break;
             case R.id.id_sign_up:
                 signDialog(R.string.sign_up, R.string.sign_up_button, 0);
-                Toast.makeText(this, "Pressed id sign up", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.id_sign_in:
                 signDialog(R.string.sign_in, R.string.sign_in_button, 1);
-                Toast.makeText(this, "Pressed id sign in", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.id_sign_out:
                 signOut();
-                Toast.makeText(this, "Pressed id sign out", Toast.LENGTH_SHORT).show();
                 break;
         }
         return true;

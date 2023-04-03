@@ -1,36 +1,77 @@
 package com.example.bulletinboard;
 
-import android.util.Log;
+import android.content.Context;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.ChildEventListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import adapter.DataSender;
+import com.example.bulletinboard.adapter.DataSender;
 
 public class DbManager {
+
+    private Context context;
     private Query mQuery;
     private List<NewPost> newPostList;
     private DataSender dataSender;
+
+    private FirebaseStorage fs;
     private FirebaseDatabase db;
     private int ads_counter = 0;
     private String[] category_ads = {"Машины", "Компьютеры", "Смартфоны", "Бытовая техника"};
 
-    public DbManager(DataSender dataSender) {
+    public void deleteItem(final NewPost newPost)
+    {
+        StorageReference sRef = fs.getReferenceFromUrl(newPost.getImageId());
+        sRef.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void unused)
+            {
+                DatabaseReference dbRef = db.getReference(newPost.getCat());
+                dbRef.child(newPost.getKey()).removeValue().addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void unused)
+                    {
+                        Toast.makeText(context, R.string.item_deleted, Toast.LENGTH_SHORT).show();
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e)
+                    {
+                        Toast.makeText(context, "Ошибка", Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e)
+            {
+                Toast.makeText(context, "Ошибка", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+    }
+
+    public DbManager(DataSender dataSender, Context context)
+    {
         this.dataSender = dataSender;
+        this.context = context;
         newPostList =  new ArrayList<>();
         db = FirebaseDatabase.getInstance();
+        fs = FirebaseStorage.getInstance();
     }
 
     public void getDataFromDb(String path)

@@ -5,7 +5,6 @@ import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -16,13 +15,11 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ActionMenuView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
@@ -30,16 +27,13 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.AuthResult;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
-import adapter.DataAdapter;
-import adapter.DataSender;
+import com.example.bulletinboard.adapter.DataAdapter;
+import com.example.bulletinboard.adapter.DataSender;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     private NavigationView nav_view;
@@ -58,14 +52,35 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private DataSender dataSender;
 
     private DbManager dbManager;
+    public static String MAUTH = "";
+
+    private String current_cat = "Машины";
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState)
+    {
         super.onCreate(savedInstanceState);
+        Log.d("MyLog","On Create");
         setContentView(R.layout.activity_main);
         init();
     }
 
+
+    @Override
+    protected void onResume()
+    {
+        super.onResume();
+        Log.d("MyLog","On Create");
+        if(current_cat.equals("my_ads"))
+        {
+            dbManager.getMyAdsFromDb(mAuth.getUid());
+        }
+        else
+        {
+            dbManager.getDataFromDb(current_cat);
+        }
+
+    }
     private void init()
     {
 
@@ -88,8 +103,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         // test
         getDataDb();
-        dbManager = new DbManager(dataSender);
-        dbManager.getDataFromDb("Машины");
+        dbManager = new DbManager(dataSender, this);
+
+        dataAdapter.setDbManager(dbManager);
 
 
 
@@ -133,6 +149,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         if (currentUser != null)
         {
             userEmail.setText(currentUser.getEmail());
+            MAUTH = mAuth.getUid();
         }
         else
         {
@@ -146,18 +163,23 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         switch (id)
         {
             case R.id.id_my_ads:
+                current_cat = "my_ads";
                 dbManager.getMyAdsFromDb(mAuth.getUid());
                 break;
             case R.id.id_car_ads:
+                current_cat = "Машины";
                 dbManager.getDataFromDb("Машины");
                 break;
             case R.id.id_pc_ads:
+                current_cat = "Компьютеры";
                 dbManager.getDataFromDb("Компьютеры");
                 break;
             case R.id.id_phone_ads:
+                current_cat = "Смартфоны";
                 dbManager.getDataFromDb("Смартфоны");
                 break;
             case R.id.id_dm_ads:
+                current_cat = "Бытовая техника";
                 dbManager.getDataFromDb("Бытовая техника");
                 break;
             case R.id.id_sign_up:

@@ -12,12 +12,14 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
         android:layout_marginEnd="10dp"
+        android:gravity="center"
         android:text="TextView"
         android:textColor="#000000"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/imAbs"
-        app:layout_constraintTop_toTopOf="@+id/imAbs" />
+        app:layout_constraintTop_toBottomOf="@+id/tvTitle" />
 
     <TextView
         android:id="@+id/tvTitle"
@@ -28,8 +30,8 @@
         android:textColor="#000000"
         android:textSize="18sp"
         android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/tvPriceRhone"
+        app:layout_constraintStart_toStartOf="@+id/tvPriceRhone"
         app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
@@ -40,7 +42,7 @@
         android:layout_marginTop="10dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvTitle"
+        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.0"
         tools:srcCompat="@tools:sample/avatars" />
 
@@ -49,10 +51,37 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginTop="10dp"
+        android:gravity="center_horizontal"
         android:text="TextView"
         android:textColor="#3A3A3A"
         app:layout_constraintBottom_toBottomOf="@+id/imAbs"
         app:layout_constraintEnd_toEndOf="@+id/tvPriceRhone"
         app:layout_constraintStart_toStartOf="@+id/tvPriceRhone"
         app:layout_constraintTop_toBottomOf="@+id/tvPriceRhone" />
+
+    <LinearLayout
+        android:id="@+id/edit_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/tvDisc"
+        app:layout_constraintTop_toBottomOf="@+id/tvDisc">
+
+        <ImageButton
+            android:id="@+id/emEditItem"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="10dp"
+            android:background="@android:drawable/screen_background_light_transparent"
+            app:srcCompat="@android:drawable/ic_menu_edit" />
+
+        <ImageButton
+            android:id="@+id/emDeleteItem"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@android:drawable/screen_background_light_transparent"
+            app:srcCompat="@android:drawable/ic_menu_delete" />
+    </LinearLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,4 +1,4 @@
-package adapter;
+package com.example.bulletinboard.adapter;
 
 import com.example.bulletinboard.NewPost;
 
